@@ -17,18 +17,21 @@ if not os.path.exists(IMAGES_DIR):
 # CSV file to save metadata
 CSV_FILE = os.path.join(DATA_DIR, "products.csv")
 
-SEARCH_QUERY = "shirt"
+SEARCH_QUERY = "shirt men"
 service = Service(CHROMEDRIVER_PATH)
 driver = webdriver.Chrome(service=service)
 
-# Open CSV file for writing
-csv_file = open(CSV_FILE, "w", newline="", encoding="utf-8")
+# Check if header is needed (i.e. file doesn't exist or is empty)
+write_header = not os.path.exists(CSV_FILE) or os.path.getsize(CSV_FILE) == 0
+
+# Open CSV file in append mode so that data is not overwritten
+csv_file = open(CSV_FILE, "a", newline="", encoding="utf-8")
 csv_writer = csv.writer(csv_file)
-# Write header row
-csv_writer.writerow([
-    "product_id", "product_name", "category", "price", "product_url", 
-    "description", "front_image_url", "model_image_url", "additional_images"
-])
+if write_header:
+    csv_writer.writerow([
+        "product_id", "product_name", "category", "price", "product_url",
+        "description", "front_image_url", "model_image_url", "additional_images"
+    ])
 
 def extract_image_url(style_attr):
     """Extract URL from a style attribute like:
@@ -72,7 +75,8 @@ try:
         except Exception:
             title = "N/A"
         try:
-            description = driver.find_element(By.CSS_SELECTOR, ".pdp-product-description-content").text
+            description = driver.find_element(By.CSS_SELECTOR, 
+                                                ".pdp-product-description-content").text
         except Exception:
             description = "N/A"
         try:
@@ -94,7 +98,8 @@ try:
         
         # Extract model image from image grid (as discussed earlier)
         try:
-            container = driver.find_element(By.CSS_SELECTOR, ".image-grid-container.common-clearfix")
+            container = driver.find_element(By.CSS_SELECTOR,
+                                              ".image-grid-container.common-clearfix")
             image_divs = container.find_elements(By.CSS_SELECTOR, ".image-grid-image")
             if image_divs:
                 model_image_div = image_divs[-1]
@@ -109,7 +114,8 @@ try:
         # Optionally, collect additional images from the image grid
         additional_images = []
         try:
-            container = driver.find_element(By.CSS_SELECTOR, ".image-grid-container.common-clearfix")
+            container = driver.find_element(By.CSS_SELECTOR,
+                                              ".image-grid-container.common-clearfix")
             image_divs = container.find_elements(By.CSS_SELECTOR, ".image-grid-image")
             for div in image_divs:
                 style_attr = div.get_attribute("style")
