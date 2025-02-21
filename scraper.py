@@ -17,7 +17,7 @@ if not os.path.exists(IMAGES_DIR):
 # CSV file to save metadata
 CSV_FILE = os.path.join(DATA_DIR, "products.csv")
 
-SEARCH_QUERY = "shirt men"
+SEARCH_QUERY = "oversized tshirts men"
 service = Service(CHROMEDRIVER_PATH)
 driver = webdriver.Chrome(service=service)
 
