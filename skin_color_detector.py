@@ -7,7 +7,7 @@ from sklearn.cluster import KMeans
 import os
 from urllib.parse import urlparse
 
-INPUT_CSV_PATH = './data/myntra_data_updated.csv'
+INPUT_CSV_PATH = './data/myntra_data_updated_front_facing.csv'
 OUTPUT_CSV_PATH = './data/myntra_data_with_skin_color.csv'
 IMAGE_COLUMN = 'new_model_image_url'
 OUTPUT_COLUMN = 'detected_skin_color_rgb'
